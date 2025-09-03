@@ -3,15 +3,10 @@
   "version": "1.0.0",
   "description": "Automated crypto-trading CLI using TypeScript and terminal-kit",
   "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dmitriy-495/dtrader-crypto-5.git"
-  },
-  "author": "Dmitriy",
-  "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
+    "start": "node dist/index.js",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
@@ -27,16 +22,19 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
     "@types/jest": "^30.0.0",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "eslint": "^9.0.0",
     "jest": "^30.0.1",
     "ts-jest": "^29.4.1",
-    "typescript": "^5.3.3",
-    "eslint": "^9.32.0",
-    "@typescript-eslint/parser": "^8.42.0",
-    "@typescript-eslint/eslint-plugin": "^8.42.0"
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
   },
   "overrides": {
-    "glob": "9.3.2"
+    "glob": "10.3.10",
+    "rimraf": "4.4.1"
   }
 }

@@ -1,51 +1,85 @@
 // src/index.ts
 
-import { terminal } from "terminal-kit";
-import WebSocket from "ws";
+import terminalKit from "terminal-kit";
+import axios from "axios";
 
+const { terminal, Document, FullscreenBlock, Text, Button } = terminalKit;
+
+// URL для ping-pong. Можно переопределить через PING_URL в окружении
+const PING_URL = process.env.PING_URL || "https://api.yourserver.com/ping";
+
+/**
+ * Пингуем сервер, замеряем латентность и логируем результат.
+ * В случае ошибки — выбрасываемся.
+ */
+async function pingServer(): Promise<void> {
+  const start = Date.now();
+  try {
+    const response = await axios.get(PING_URL);
+    const latency = Date.now() - start;
+    console.log(
+      `🥊 Pong от сервера: ${response.data} (латентность: ${latency} ms)`
+    );
+  } catch (error) {
+    console.error("🔴 Ошибка при ping-pong:", error);
+    process.exit(1);
+  }
+}
+
+/**
+ * Основная точка входа.
+ * Сначала логируем приветствие и делаем ping-pong,
+ * потом сразу рендерим интерфейс через Document-модель.
+ */
 async function main() {
+  console.log("👋 Добро пожаловать в DTrader Crypto CLI!");
+  await pingServer();
+
   terminal.clear();
-  terminal.bold.blue("Привет! Добро пожаловать в DTrader Crypto CLI\n\n");
 
-  const ws = new WebSocket("wss://api.gateio.ws/ws/v4/");
+  // Создаём корневой документ
+  const doc = new Document();
 
-  ws.on("open", () => {
-    terminal.green("✅ Соединение установлено с Gate.io\n");
-    const pingMsg = {
-      id: 1,
-      method: "server.ping",
-      params: [],
-    };
-    terminal.yellow("➡ Отправка ping...\n");
-    ws.send(JSON.stringify(pingMsg));
+  // Полноэкранный контейнер
+  const screen = new FullscreenBlock({
+    parent: doc,
+    width: "100%",
+    height: "100%",
   });
 
-  ws.on("message", (raw) => {
-    try {
-      const msg = JSON.parse(raw.toString());
-      if (msg.id === 1 && msg.result === "pong") {
-        terminal.green("⬅ Получен pong от Gate.io\n");
-      } else {
-        terminal.cyan("ℹ Получено сообщение:", msg, "\n");
-      }
-    } catch (err: any) {
-      terminal.red("❌ Ошибка при разборе сообщения:", err.message, "\n");
+  // Заголовок
+  new Text({
+    parent: screen,
+    content: "DTrader Crypto CLI",
+    x: "center",
+    y: 2,
+    attr: { color: "green", bold: true },
+  });
+
+  // Кнопка старта торговли
+  const startButton = new Button({
+    parent: screen,
+    content: "[ Начать торговлю ]",
+    x: "center",
+    y: 6,
+    attr: { fgColor: "white", bgColor: "blue" },
+  });
+
+  startButton.on("submit", () => {
+    terminal.clear();
+    terminal.green("🚀 Торговля запущена...\n");
+    process.exit(0);
+  });
+
+  // Глобальные клавиши выхода
+  doc.on("key", (name) => {
+    if (name === "CTRL_C" || name === "q" || name === "ESCAPE") {
+      terminal.clear();
+      process.exit(0);
     }
   });
 
-  ws.on("error", (err) => {
-    terminal.red("🚨 WebSocket ошибка:", err.message, "\n");
-  });
-
-  ws.on("close", (code, reason) => {
-    terminal.red(
-      `🔒 Соединение закрыто (code=${code}, reason=${reason.toString()})\n`
-    );
-    process.exit(0);
-  });
+  doc.render();
 }
 
-main().catch((err) => {
-  terminal.red("Не удалось запустить приложение:", err.message, "\n");
-  process.exit(1);
-});
+main();
