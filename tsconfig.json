@@ -1,0 +1,40 @@
+// tsconfig.json: конфигурация компилятора TypeScript для проекта DTrader Crypto CLI
+{
+  "compilerOptions": {
+    // Уровень JavaScript, который будет генерироваться (ES2020 поддерживает современные фичи)
+    "target": "ES2020",
+
+    // Система модулей: CommonJS используется в Node.js по умолчанию
+    "module": "commonjs",
+
+    // Включить поддержку импортов из CommonJS-модулей через default (ws, pino и т.д.)
+    "esModuleInterop": true,
+
+    // Разрешить синтетические default-импорты, даже если модуль их не экспортирует явно
+    "allowSyntheticDefaultImports": true,
+
+    // Как разрешать модули: аналогично Node.js (по папкам node_modules и package.json)
+    "moduleResolution": "node",
+
+    // Разрешить импорт JSON-файлов напрямую
+    "resolveJsonModule": true,
+
+    // Пропускать проверку типов в файлах деклараций (.d.ts) для ускорения сборки
+    "skipLibCheck": true,
+
+    // Включить все строгие проверки (noImplicitAny, strictNullChecks и т.д.)
+    "strict": true,
+
+    // Путь к корню исходников (TypeScript будет искать файлы только здесь)
+    "rootDir": "src",
+
+    // Папка, куда будут складываться скомпилированные .js и .d.ts
+    "outDir": "dist"
+  },
+
+  // Список включаемых файлов/папок для компиляции
+  "include": ["src/**/*"],
+
+  // Исключаем node_modules и папку dist из процесса компиляции
+  "exclude": ["node_modules", "dist"]
+}
