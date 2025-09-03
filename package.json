@@ -1,0 +1,48 @@
+{
+  "name": "dtrader-crypto-4",
+  "version": "1.0.0",
+  "description": "Automated crypto-trading CLI using TypeScript, terminal-kit layout, pino logging, and zod config validation",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitriy-495/dtrader-crypto-4.git"
+  },
+  "keywords": [
+    "crypto",
+    "trading",
+    "cli",
+    "typescript",
+    "terminal-kit"
+  ],
+  "author": "Dmitriy",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "axios": "1.11.0",
+    "commander": "11.0.0",
+    "dotenv": "16.0.3",
+    "pino": "9.7.0",
+    "pino-pretty": "9.3.0",
+    "terminal-kit": "3.1.1",
+    "ws": "8.13.0",
+    "zod": "4.0.17"
+  },
+  "devDependencies": {
+    "@types/jest": "29.4.0",
+    "@types/node": "20.4.2",
+    "@types/ws": "8.5.6",
+    "@typescript-eslint/eslint-plugin": "6.4.0",
+    "@typescript-eslint/parser": "6.4.0",
+    "eslint": "8.41.0",
+    "jest": "30.0.5",
+    "ts-jest": "29.1.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.9.2"
+  }
+}
